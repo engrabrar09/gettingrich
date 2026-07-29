@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "es2023",
+    "lib": ["ES2023", "DOM"],
+    "module": "esnext",
+    "types": ["vite/client"],
+    "allowArbitraryExtensions": true,
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* No baseUrl: deprecated in TS 6. Under moduleResolution "bundler",
+       paths resolve relative to this file's directory. */
+    "paths": {
+      "@/*": ["./src/*"],
+      "@analytics": ["./shared/analytics/index.ts"],
+      "@analytics/*": ["./shared/analytics/*"]
+    }
+  },
+  "include": ["src", "shared"],
+  /* deno_smoke.ts targets the Deno runtime and references the `Deno` global,
+     which does not exist in the browser lib. It is run by the Deno binary
+     directly, never bundled, so it is excluded from the app typecheck. */
+  "exclude": ["shared/analytics/__tests__/deno_smoke.ts"]
+}

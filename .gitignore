@@ -1,0 +1,33 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Environment files.
+# The scaffold only ships `*.local`, which misses a plain `.env` — the most
+# common filename. This repo is PUBLIC (GitHub Pages requires it on the free
+# plan), so a committed secret is a published secret. Only .env.example, which
+# contains no real values, is tracked.
+.env
+.env.*
+!.env.example
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

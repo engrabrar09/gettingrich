@@ -1,0 +1,51 @@
+name: Supabase keepalive
+
+# Supabase pauses free projects after 7 DAYS of no API requests. pg_cron running
+# inside the project does NOT count — the request has to arrive from outside.
+#
+# Every 3 days gives two chances to succeed before the 7-day window closes.
+#
+# ⚠ TWO SILENT FAILURE MODES, both of which end with a paused project:
+#   1. GitHub disables scheduled workflows after 60 days with no commit to the
+#      default branch. A repo that goes quiet loses this job.
+#   2. If the secrets are wrong the curl fails, and nothing tells you until the
+#      project is already down. That is why this job asserts on the HTTP status
+#      instead of firing and forgetting.
+on:
+  schedule:
+    - cron: '0 6 */3 * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST
+        env:
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::error::VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY are not set."
+            echo "Without them this job cannot keep the project alive."
+            exit 1
+          fi
+
+          # Any real query resets the idle timer. RLS will return an empty array
+          # for the anon role, which is fine — the round trip is the point.
+          status=$(curl -s -o /tmp/body -w '%{http_code}' \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            "$SUPABASE_URL/rest/v1/assets?select=id&limit=1")
+
+          echo "HTTP $status"
+          cat /tmp/body
+
+          # 2xx means the database answered. Anything else means the project is
+          # already paused, the keys are wrong, or the URL changed.
+          if [ "$status" -lt 200 ] || [ "$status" -ge 300 ]; then
+            echo "::error::Keepalive failed with HTTP $status — the project may already be paused."
+            exit 1
+          fi
+
+          echo "Keepalive OK."

@@ -1,0 +1,58 @@
+@import 'tailwindcss';
+
+/*
+  Clean consumer fintech: generous spacing, big hero numbers, card layouts,
+  mobile-first. Tokens live here so the whole app shares one scale.
+*/
+@theme {
+  --color-surface: oklch(100% 0 0);
+  --color-surface-muted: oklch(97.5% 0.004 250);
+  --color-border-subtle: oklch(92% 0.006 250);
+  --color-ink: oklch(21% 0.02 260);
+  --color-ink-muted: oklch(52% 0.015 260);
+  --color-brand: oklch(58% 0.16 255);
+
+  /* Gain/loss. Colour ALONE must never carry the meaning — every use is paired
+     with a sign or an arrow, because red/green is the most common colour-vision
+     deficiency. See directionGlyph() in src/lib/format.ts. */
+  --color-gain: oklch(58% 0.15 155);
+  --color-loss: oklch(58% 0.19 22);
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-numeric: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-surface: oklch(19% 0.015 260);
+    --color-surface-muted: oklch(15% 0.012 260);
+    --color-border-subtle: oklch(30% 0.02 260);
+    --color-ink: oklch(96% 0.005 250);
+    --color-ink-muted: oklch(70% 0.015 258);
+  }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-surface-muted);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Prices, quantities and percentages — anywhere digits should not jitter as
+   values update. */
+.numeric {
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-numeric);
+}
