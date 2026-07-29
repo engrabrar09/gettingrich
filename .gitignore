@@ -21,6 +21,10 @@ dist-ssr
 .env.*
 !.env.example
 
+# Supabase CLI link state — machine-local, contains the pooler connection URL.
+# The migrations themselves ARE tracked; this is just local link bookkeeping.
+supabase/.temp/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

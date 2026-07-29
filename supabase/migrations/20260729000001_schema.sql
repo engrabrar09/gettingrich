@@ -43,10 +43,17 @@ create table public.assets (
   provider_key  text,
   is_active     boolean not null default true,
   created_at    timestamptz not null default now(),
-  updated_at    timestamptz not null default now(),
-  -- Metals and crypto have no exchange, so coalesce to keep the key total.
-  unique (symbol, asset_class, coalesce(exchange, ''))
+  updated_at    timestamptz not null default now()
 );
+
+-- Metals and crypto have no exchange, so coalesce keeps the key total —
+-- otherwise NULL != NULL and duplicate (symbol, asset_class) rows slip through.
+--
+-- This MUST be a unique INDEX, not a table-level `unique (...)` constraint:
+-- Postgres only accepts plain column names in a UNIQUE constraint, and rejects
+-- any expression such as coalesce().
+create unique index assets_identity_key
+  on public.assets (symbol, asset_class, coalesce(exchange, ''));
 
 create index assets_active_idx on public.assets (asset_class) where is_active;
 
@@ -116,7 +123,9 @@ create table public.indicators (
   macd              numeric(20,8),
   macd_signal       numeric(20,8),
   macd_histogram    numeric(20,8),
-  cross             text check (cross in ('golden','death')),
+  -- Named ma_cross, not `cross`: CROSS is a reserved word in Postgres (CROSS
+  -- JOIN) and would need quoting at every single use site.
+  ma_cross          text check (ma_cross in ('golden','death')),
 
   rsi_14            numeric(10,6),
   stoch_k           numeric(10,6),
