@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard,
   Briefcase,
@@ -6,7 +6,9 @@ import {
   Newspaper,
   Bell,
   Settings as SettingsIcon,
+  LogOut,
 } from 'lucide-react'
+import { useAuth } from '../lib/auth.tsx'
 
 const NAV = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
@@ -25,10 +27,19 @@ const NAV = [
  * table, filtered to `read_at is null`.
  */
 export default function AppShell({ unreadCount = 0 }: { unreadCount?: number }) {
+  const { user, signOut } = useAuth()
+  const navigate = useNavigate()
+
+  async function handleSignOut() {
+    await signOut()
+    // Replace, so Back does not land on a page that will immediately bounce.
+    navigate('/auth', { replace: true })
+  }
+
   return (
     <div className="flex min-h-full flex-col md:flex-row">
       {/* Desktop sidebar */}
-      <aside className="hidden w-60 shrink-0 border-r border-(--color-border-subtle) bg-(--color-surface) p-4 md:block">
+      <aside className="hidden w-60 shrink-0 flex-col border-r border-(--color-border-subtle) bg-(--color-surface) p-4 md:flex">
         <div className="mb-8 px-2">
           <h1 className="text-lg font-semibold tracking-tight">Portfolio</h1>
           <p className="text-xs text-(--color-ink-muted)">Markets &amp; alerts</p>
@@ -61,6 +72,23 @@ export default function AppShell({ unreadCount = 0 }: { unreadCount?: number }) 
             </NavLink>
           ))}
         </nav>
+
+        {/* mt-auto pins this to the bottom of the sidebar column */}
+        <div className="mt-auto border-t border-(--color-border-subtle) pt-4">
+          {user?.email && (
+            <p className="truncate px-3 pb-2 text-xs text-(--color-ink-muted)" title={user.email}>
+              {user.email}
+            </p>
+          )}
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-(--color-ink-muted) transition-colors hover:bg-(--color-surface-muted)"
+          >
+            <LogOut size={18} aria-hidden />
+            <span>Sign out</span>
+          </button>
+        </div>
       </aside>
 
       {/* pb-20 clears the fixed mobile tab bar so content is never hidden behind it */}
