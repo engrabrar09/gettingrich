@@ -4,7 +4,7 @@
     "target": "es2023",
     "lib": ["ES2023", "DOM"],
     "module": "esnext",
-    "types": ["vite/client"],
+    "types": ["vite/client", "vite-plugin-pwa/react"],
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
 
@@ -33,6 +33,9 @@
   "include": ["src", "shared"],
   /* deno_smoke.ts targets the Deno runtime and references the `Deno` global,
      which does not exist in the browser lib. It is run by the Deno binary
-     directly, never bundled, so it is excluded from the app typecheck. */
-  "exclude": ["shared/analytics/__tests__/deno_smoke.ts"]
+     directly, never bundled, so it is excluded from the app typecheck.
+
+     src/sw.ts needs the WebWorker lib, which conflicts with DOM — it is
+     typechecked by tsconfig.worker.json instead. */
+  "exclude": ["shared/analytics/__tests__/deno_smoke.ts", "src/sw.ts"]
 }

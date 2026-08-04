@@ -2,9 +2,30 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>gettingrich</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <title>Portfolio Tracker</title>
+    <meta
+      name="description"
+      content="Track investments across equities, metals and crypto with technical analysis and alerts."
+    />
+
+    <link rel="icon" href="favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="app-icon.svg" />
+
+    <!--
+      iOS ignores the web manifest's icons for Add to Home Screen and reads this
+      instead. Without it the home-screen icon is a screenshot of the page — and
+      Add to Home Screen is the ONLY way to get Web Push on iOS at all.
+    -->
+    <link rel="apple-touch-icon" href="apple-touch-icon-180x180.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Portfolio" />
+
+    <!-- Two entries so the browser chrome follows the OS theme. -->
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f8" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#181a20" />
   </head>
   <body>
     <div id="root"></div>

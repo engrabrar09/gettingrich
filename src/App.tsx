@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import AppShell from './components/AppShell.tsx'
 import SetupRequired from './components/SetupRequired.tsx'
 import RequireAuth from './components/RequireAuth.tsx'
+import UpdatePrompt from './components/UpdatePrompt.tsx'
 import { AuthProvider } from './lib/auth.tsx'
 import { isSupabaseConfigured } from './lib/supabase.ts'
 
@@ -33,10 +34,21 @@ export default function App() {
   //
   // This check MUST come before <AuthProvider>, which calls getSupabase() on
   // mount and would throw if the client was never constructed.
-  if (!isSupabaseConfigured) return <SetupRequired />
+  // UpdatePrompt also performs service-worker registration, so it renders on
+  // both branches — the PWA should still install and update even before
+  // Supabase is configured.
+  if (!isSupabaseConfigured) {
+    return (
+      <>
+        <SetupRequired />
+        <UpdatePrompt />
+      </>
+    )
+  }
 
   return (
     <AuthProvider>
+      <UpdatePrompt />
       <Suspense fallback={<RouteFallback />}>
         <Routes>
           {/* Unguarded — guarding the sign-in page would loop forever. */}

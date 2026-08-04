@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Portfolio tracker">
+  <!--
+    Source icon for PWA asset generation. Kept deliberately simple and
+    high-contrast: at 48px on a home screen, detail disappears and only the
+    silhouette reads. Generous internal padding so the maskable variant
+    survives Android's circular crop without clipping the chart.
+  -->
+  <rect width="512" height="512" rx="112" fill="#2563eb"/>
+
+  <!-- Ascending bars -->
+  <g fill="#ffffff" opacity="0.35">
+    <rect x="128" y="288" width="52" height="112" rx="16"/>
+    <rect x="204" y="240" width="52" height="160" rx="16"/>
+    <rect x="280" y="272" width="52" height="128" rx="16"/>
+    <rect x="356" y="192" width="52" height="208" rx="16"/>
+  </g>
+
+  <!-- Trend line over the bars -->
+  <polyline
+    points="140,300 230,244 306,278 382,168"
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="26"
+    stroke-linecap="round"
+    stroke-linejoin="round"/>
+
+  <!-- Endpoint marker -->
+  <circle cx="382" cy="168" r="30" fill="#ffffff"/>
+  <circle cx="382" cy="168" r="14" fill="#2563eb"/>
+</svg>
