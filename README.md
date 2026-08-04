@@ -10,22 +10,34 @@ Hosted free on GitHub Pages; backend on Supabase's free tier.
 
 ## Status
 
-Phase 1 (foundation) is partially complete. **Be clear about what is and is not done:**
+**Phase 1 (foundation) is complete.** What that does and does not mean:
 
 | Area | Status |
 |---|---|
-| Analytics engine (`shared/analytics/`) | ✅ **Complete and verified** — 76 tests, Node/Deno parity proven |
-| Supabase schema + RLS (`supabase/migrations/`) | ⚠️ **Written but UNVERIFIED** — never executed against Postgres |
-| CI workflows (`.github/workflows/`) | ⚠️ Written, never run |
+| Analytics engine (`shared/analytics/`) | ✅ **Verified** — 76 tests, Node/Deno parity proven bit-for-bit |
+| Supabase schema + RLS | ✅ **Applied** — all 19 tables live; types generated from the real schema |
+| RLS *isolation* | ⚠️ **UNVERIFIED** — policies exist, but nothing has proven they isolate two users. Run `npm run verify:rls` |
+| Auth (email/password) | ⚠️ Guard + redirect verified in-browser; **signed-in round trip untested** |
+| PWA (manifest, icons, service worker) | ✅ Worker activates, manifest + icons serve, console clean |
 | App shell, routing, design tokens | ✅ Builds and renders |
-| Auth flow | ❌ Not started |
-| PWA manifest / service worker | ❌ Not started |
+| CI deploy → GitHub Pages | ✅ Green; site live |
 | Market data providers | ❌ Phase 2 |
 | Alert engine | ❌ Phase 4 |
 | Dual AI analysis | ❌ Phase 5 |
 
 Every route exists and navigates; unbuilt pages say so explicitly rather than
 faking content.
+
+**The one thing to do before putting real data in:** `npm run verify:rls`.
+RLS is the only barrier between two users' portfolios, and it is currently
+untested. See Security notes below.
+
+### Deviation from plan
+
+The plan specified shadcn/ui. The components here are plain Tailwind instead —
+the surface so far is small (nav, cards, one form) and did not justify the
+dependency. shadcn/ui is copy-in rather than a package, so adopting it later is
+additive, not a migration.
 
 ---
 
