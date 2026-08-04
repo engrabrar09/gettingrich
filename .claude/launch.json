@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "// note": "Invokes node.exe directly rather than npm. Shells here can start with a stale PATH predating the Node install, and npm.cmd internally shells out to bare `node`, which then fails to resolve.",
+      "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
+      "runtimeArgs": ["node_modules/vite/bin/vite.js"],
+      "port": 5173
+    }
+  ]
+}

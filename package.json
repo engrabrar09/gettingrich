@@ -9,6 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
+    "verify:rls": "node --env-file=.env.local scripts/verify-rls.mjs",
     "test:watch": "vitest",
     "typecheck": "tsc -b"
   },
